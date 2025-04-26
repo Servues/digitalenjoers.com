@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .payment-section {
+            padding: 5rem 0;
+        }
+        
+        .payment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .payment-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .payment-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .payment-body {
+            padding: 2rem;
+        }
+        
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-method {
+            margin: 0 1rem;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        
+        .payment-method.active {
+            opacity: 1;
+        }
+        
+        .payment-method i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
+        }
+        
+        .card-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-pay {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-pay:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .payment-summary {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            border-top: 1px solid #ddd;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .form-group.error .form-control {
+            border-color: var(--danger);
+        }
+        
+        .form-group.error .error-message {
+            display: block;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .success-message i {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+        
+        .success-message h2 {
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.5s;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .card-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>TechSolutions</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/payment">Оплата</a></li>
+                    <li><a href="/about">О команде</a></li>
+                </ul>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="payment-section">
+        <div class="container">
+            <div class="payment-container">
+                <div class="payment-header">
+                    <h1>Оплата услуг</h1>
+                    <p>Безопасная оплата через защищенное соединение</p>
+                </div>
+                
+                <div class="payment-body">
+                    <div class="payment-methods">
+                        <div class="payment-method active" data-method="credit">
+                            <i class="fab fa-cc-visa"></i>
+                        </div>
+                        <div class="payment-method" data-method="paypal">
+                            <i class="fab fa-cc-paypal"></i>
+                        </div>
+                        <div class="payment-method" data-method="apple">
+                            <i class="fab fa-cc-apple-pay"></i>
+                        </div>
+                    </div>
+                    
+                    <form id="paymentForm">
+                        <div class="form-group">
+                            <label for="cardNumber">Номер карты</label>
+                            <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456">
+                            <div class="error-message">Пожалуйста, введите корректный номер карты</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cardName">Имя на карте</label>
+                            <input type="text" id="cardName" class="form-control" placeholder="IVAN IVANOV">
+                            <div class="error-message">Пожалуйста, введите имя</div>
+                        </div>
+                        
+                        <div class="card-details">
+                            <div class="form-group">
+                                <label for="expiryDate">Срок действия</label>
+                                <input type="text" id="expiryDate" class="form-control" placeholder="MM/ГГ">
+                                <div class="error-message">Пожалуйста, введите срок действия</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="text" id="cvv" class="form-control" placeholder="123">
+                                <div class="error-message">Пожалуйста, введите CVV</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="amount">Сумма оплаты</label>
+                            <input type="text" id="amount" class="form-control" placeholder="1000.00">
+                            <div class="error-message">Пожалуйста, введите сумму</div>
+                        </div>
+                        
+                        <button type="submit" class="btn-pay">Оплатить</button>
+                    </form>
+                    
+                    <div class="payment-summary">
+                        <h3>Детали платежа</h3>
+                        <div class="summary-item">
+                            <span>Продукт:</span>
+                            <span>Премиум подписка</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Срок:</span>
+                            <span>1 год</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Налог:</span>
+                            <span>0.00 ₽</span>
+                        </div>
+                        <div class="summary-item summary-total">
+                            <span>Итого:</span>
+                            <span>1000.00 ₽</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <h2>Оплата прошла успешно!</h2>
+                    <p>Спасибо за ваш платеж. Мы отправили подтверждение на ваш email.</p>
+                    <a href="/" class="btn-pay" style="margin-top: 1rem;">Вернуться на главную</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                <span>TechSolutions</span>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p>&copy; 2023 TechSolutions. Все права защищены.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Мобильное меню
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Выбор метода оплаты
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', () => {
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                method.classList.add('active');
+            });
+        });
+        
+        // Форматирование номера карты
+        const cardNumberInput = document.getElementById('cardNumber');
+        
+        cardNumberInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\s+/g, '');
+            if (value.length > 0) {
+                value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
+            }
+            e.target.value = value;
+        });
+        
+        // Форматирование срока действия
+        const expiryDateInput = document.getElementById('expiryDate');
+        
+        expiryDateInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+        
+        // Валидация формы
+        const paymentForm = document.getElementById('paymentForm');
+        const successMessage = document.getElementById('successMessage');
+        
+        paymentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+            
+            // Проверка номера карты
+            const cardNumber = cardNumberInput.value.replace(/\s+/g, '');
+            if (cardNumber.length !== 16 || !/^\d+$/.test(cardNumber)) {
+                cardNumberInput.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                cardNumberInput.parentElement.classList.remove('error');
+            }
+            
+            // Проверка имени
+            const cardName = document.getElementById('cardName').value;
+            if (cardName.trim() === '') {
+                document.getElementById('cardName').parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('cardName').parentElement.classList.remove('error');
+            }
+            
+            // Проверка срока действия
+            const expiryDate = expiryDateInput.value;
+            if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+                expiryDateInput.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                expiryDateInput.parentElement.classList.remove('error');
+            }
+            
+            // Проверка CVV
+            const cvv = document.getElementById('cvv').value;
+            if (cvv.length !== 3 || !/^\d+$/.test(cvv)) {
+                document.getElementById('cvv').parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('cvv').parentElement.classList.remove('error');
+            }
+            
+            // Проверка суммы
+            const amount = document.getElementById('amount').value;
+            if (amount.trim() === '' || isNaN(parseFloat(amount))) {
+                document.getElementById('amount').parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('amount').parentElement.classList.remove('error');
+            }
+            
+            // Если все правильно, показываем сообщение об успехе
+            if (isValid) {
+                paymentForm.style.display = 'none';
+                successMessage.style.display = 'block';
+                
+                // Анимация успеха
+                setTimeout(() => {
+                    successMessage.style.opacity = '1';
+                    successMessage.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
